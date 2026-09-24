@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch 3: Урок 5 — Здоровье героя и Game Over ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151d30;
+            --scratch-orange: #ffab19;
+            --scratch-orange-glow: rgba(255, 171, 25, 0.4);
+            --scratch-blue: #4c97ff;
+            --scratch-yellow: #ffbf00;
+            --scratch-control: #ffab19;
+            --scratch-purple: #9966ff;
+            --scratch-pink: #cf63cf;
+            --scratch-green: #59c059;
+            --scratch-sensing: #5cb1d6;
+            --scratch-red: #ef4444;
+            --scratch-red-glow: rgba(239, 68, 68, 0.4);
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-card: #27354f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: radial-gradient(circle at top center, #261624 0%, #0a0d14 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 14px 40px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: var(--bg-card);
+            border-radius: 18px;
+            border: 2px solid #2d3b55;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            margin-bottom: 22px;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-title h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 15px;
+            color: #f43f5e;
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .brand-title span {
+            font-size: 13px;
+            color: var(--scratch-orange);
+            font-weight: 700;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-pill {
+            background: #0f172a;
+            border: 2px solid #f43f5e;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 14px;
+            color: #f43f5e;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-back {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            color: #fff;
+            border-color: #38bdf8;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-card);
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .story-box {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.12), rgba(255, 171, 25, 0.08));
+            border-left: 6px solid #f43f5e;
+            border-radius: 14px;
+            padding: 18px 22px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .story-box strong {
+            color: #fb7185;
+        }
+
+        .script-stack {
+            background: #0b111e;
+            border: 2px solid #22314a;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .scratch-block {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+        }
+
+        .block-event {
+            background: #ffbf00;
+            color: #2b1f00;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+        }
+
+        .block-variable {
+            background: #ff8c1a;
+        }
+
+        .block-control {
+            background: #ffab19;
+            color: #261b00;
+        }
+
+        .block-motion {
+            background: #4c97ff;
+        }
+
+        .block-looks {
+            background: #9966ff;
+        }
+
+        .block-sound {
+            background: #cf63cf;
+        }
+
+        .loop-c-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .loop-header {
+            background: #ffab19;
+            color: #261b00;
+            padding: 8px 14px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+            font-size: 14px;
+        }
+
+        .loop-body {
+            border-left: 18px solid #ffab19;
+            padding: 8px 0 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(255, 171, 25, 0.05);
+        }
+
+        .loop-footer {
+            background: #ffab19;
+            height: 14px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .block-sensing {
+            background: #5cb1d6;
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #fff;
+        }
+
+        .block-operator {
+            background: #59c059;
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+        }
+
+        .pill-var-orange {
+            background: #ff8c1a;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .pill-value {
+            background: #fff;
+            color: #111;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+
+        .dropdown-value {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .rule-card {
+            background: #0d1424;
+            border: 1.5px solid #22314a;
+            border-radius: 14px;
+            padding: 16px 20px;
+            border-top: 4px solid #f43f5e;
+        }
+
+        .rule-card h3 {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rule-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .screenshot-wrap {
+            margin-top: 20px;
+            background: #090e17;
+            border: 2px dashed #3b4d6e;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .screenshot-wrap img {
+            width: 100%;
+            max-width: 920px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid #24354f;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .screenshot-caption {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Interactive Crab-Dodge Arena */
+        .arcade-arena {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #090e17 100%);
+            border: 2px solid #f43f5e;
+            border-radius: 18px;
+            height: 340px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(244, 63, 94, 0.2);
+            user-select: none;
+        }
+
+        .scoreboard-lives {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            padding: 6px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 900;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        .actor-cat {
+            position: absolute;
+            font-size: 48px;
+            left: 40px;
+            top: 140px;
+            transition: left 0.1s ease, top 0.1s ease;
+            z-index: 5;
+            cursor: grab;
+        }
+
+        .actor-crab {
+            position: absolute;
+            font-size: 44px;
+            right: 40px;
+            top: 140px;
+            z-index: 5;
+            animation: crabPatrol 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes crabPatrol {
+            0% { transform: translateY(-90px); }
+            50% { transform: translateY(90px); }
+            100% { transform: translateY(-40px); }
+        }
+
+        .game-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(9, 14, 23, 0.88);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            backdrop-filter: blur(4px);
+        }
+
+        .game-over-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 24px;
+            color: #ef4444;
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+            margin-bottom: 16px;
+        }
+
+        .touch-pad {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            justify-content: center;
+        }
+
+        .pad-btn {
+            background: #1e293b;
+            border: 2px solid #334155;
+            color: #fff;
+            font-size: 20px;
+            width: 52px;
+            height: 48px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.1s;
+        }
+
+        .pad-btn:active {
+            background: #f43f5e;
+        }
+
+        .btn-restart {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #059669;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title">
+            <span style="font-size: 28px;">❤️</span>
+            <div>
+                <h1>SCRATCH 3 КУРС</h1>
+                <span>Урок 5: Здоровье героя и Game Over</span>
+            </div>
+        </div>
+        <div class="top-actions">
+            <a href="index.html" class="btn-back">⬅ К урокам</a>
+            <div class="badge-pill">⭐ Занятие 5</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Введение -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🛡️</span>
+                <h2 class="card-title">Задача 5. «Жизни героя и условие Game Over»</h2>
+            </div>
+            <div class="story-box">
+                Почти в каждой игре у персонажа есть запас жизней или очков здоровья (HP)! <br>
+                <strong>Сюжет:</strong> Наш Кот исследует локацию, но там ползает опасный Краб 🦀. Если Кот натыкается на него, Краб отнимает <strong>-1 жизнь</strong>, а Кот отскакивает обратно на базу! Если сердечек не остаётся (Жизни = 0) — звучит сигнал проигрыша и игра заканчивается.
+            </div>
+        </div>
+
+        <!-- Скрипт в Scratch -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🧩</span>
+                <h2 class="card-title">Скрипт защиты и столкновений</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 14px;">
+                Спрайты: <b>Котик Scratch</b> и <b>Crab (Краб)</b>. Переменная: <b>Жизни</b>. Этот код собирается для Котика:
+            </p>
+
+            <div class="script-stack">
+                <!-- Старт -->
+                <div class="scratch-block block-event">
+                    когда 🚩 нажат
+                </div>
+
+                <!-- Задать Жизни 3 -->
+                <div class="scratch-block block-variable">
+                    задать <span class="dropdown-value">Жизни ▾</span> значение <span class="pill-value">3</span>
+                </div>
+
+                <!-- Повторять всегда -->
+                <div class="loop-c-wrapper">
+                    <div class="loop-header">
+                        повторять всегда
+                    </div>
+                    <div class="loop-body">
+                        
+                        <!-- Внешнее условие: касается краба -->
+                        <div class="loop-c-wrapper">
+                            <div class="loop-header">
+                                если 
+                                <span class="block-sensing">
+                                    касается <span class="dropdown-value">Краб ▾</span> ?
+                                </span> то
+                            </div>
+                            <div class="loop-body">
+                                <div class="scratch-block block-variable">
+                                    изменить <span class="dropdown-value">Жизни ▾</span> на <span class="pill-value">-1</span>
+                                </div>
+                                <div class="scratch-block block-sound">
+                                    включить звук <span class="dropdown-value">Oops ▾</span>
+                                </div>
+                                <div class="scratch-block block-motion">
+                                    перейти в x: <span class="pill-value">-180</span> y: <span class="pill-value">0</span>
+                                </div>
+
+                                <!-- Вложенное условие: Жизни = 0 -->
+                                <div class="loop-c-wrapper">
+                                    <div class="loop-header">
+                                        если 
+                                        <span class="block-operator">
+                                            <span class="pill-var-orange">Жизни</span> = <span class="pill-value">0</span>
+                                        </span> то
+                                    </div>
+                                    <div class="loop-body">
+                                        <div class="scratch-block block-looks">
+                                            говорить <span class="pill-value">Игра окончена!</span> <span class="pill-value">2</span> секунд
+                                        </div>
+                                        <div class="scratch-block block-control">
+                                            стоп <span class="dropdown-value">всё ▾</span>
+                                        </div>
+                                    </div>
+                                    <div class="loop-footer"></div>
+                                </div>
+
+                            </div>
+                            <div class="loop-footer"></div>
+                        </div>
+
+                    </div>
+                    <div class="loop-footer"></div>
+                </div>
+            </div>
+
+            <!-- Главные правила урока -->
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h3>🚪 Зачем телепорт назад?</h3>
+                    <p>Блок <b>перейти в x: -180 y: 0</b> сразу отбрасывает Кота подальше от врага. Без него Краб касался бы Кота каждую миллисекунду и все 3 жизни сгорели бы мгновенно!</p>
+                </div>
+                <div class="rule-card">
+                    <h3>📦 Счётчик ресурса</h3>
+                    <p>Переменная <b>Жизни</b> защищает героя. Мы можем не только добавлять очки (как в уроке 1), но и тратить их при ошибках.</p>
+                </div>
+                <div class="rule-card">
+                    <h3>🛑 Финал: Стоп всё</h3>
+                    <p>Красный блок <b>стоп [всё]</b> полностью выключает все двигающиеся спрайты и скрипты игры, фиксируя результат.</p>
+                </div>
+            </div>
+
+            <!-- Место под скриншот -->
+            <div class="screenshot-wrap">
+                <img src="screenshot_lives.png" alt="Скриншот условия с жизнями в Scratch 3" onerror="this.parentElement.style.display='none'">
+                <div class="screenshot-caption">
+                    📸 Скриншот из Scratch 3: обрати внимание, как условие «Жизни = 0» вложено внутрь первого условия!
+                </div>
+            </div>
+        </div>
+
+        <!-- Интерактивная демка -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🎮</span>
+                <h2 class="card-title">Попробуй увернуться от Краба!</h2>
+            </div>
+            
+            <div class="arcade-arena" id="arcadeStage">
+                <div class="scoreboard-lives">
+                    <span>Жизни:</span>
+                    <span id="heartsContainer">❤️❤️❤️</span>
+                </div>
+
+                <div class="actor-cat" id="catPlayer">🐱</div>
+                <div class="actor-crab" id="crabEnemy">🦀</div>
+
+                <div class="game-overlay" id="gameOverOverlay">
+                    <div class="game-over-title">ИГРА ОКОНЧЕНА!</div>
+                    <p style="color: #cbd5e1; margin-bottom: 20px;">Краб победил! Попробуй ещё раз!</p>
+                    <button class="btn-restart" onclick="restartMiniGame()">🚩 Начать заново</button>
+                </div>
+            </div>
+
+            <div class="touch-pad">
+                <button class="pad-btn" onclick="moveCat(0, -25)">⬆️</button>
+                <button class="pad-btn" onclick="moveCat(-25, 0)">⬅️</button>
+                <button class="pad-btn" onclick="moveCat(0, 25)">⬇️</button>
+                <button class="pad-btn" onclick="moveCat(25, 0)">➡️</button>
+            </div>
+            <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 8px;">
+                💡 Управляй Котиком с помощью клавиатурных стрелок или кнопок на экране
+            </p>
+        </div>
+
+    </div>
+
+    <footer>
+        Уроки Scratch 3 • GitHub Pages
+    </footer>
+
+    <script>
+        let lives = 3;
+        let catX = 40;
+        let catY = 140;
+        let isDead = false;
+        let audioCtx = null;
+
+        const cat = document.getElementById('catPlayer');
+        const crab = document.getElementById('crabEnemy');
+        const hearts = document.getElementById('heartsContainer');
+        const overlay = document.getElementById('gameOverOverlay');
+        const stage = document.getElementById('arcadeStage');
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playDamageSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(240, now);
+                osc.frequency.linearRampToValueAtTime(80, now + 0.16);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.16);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.16);
+            } catch(e) {}
+        }
+
+        function moveCat(dx, dy) {
+            if (isDead) return;
+            initAudio();
+
+            const maxX = stage.clientWidth - 60;
+            const maxY = stage.clientHeight - 60;
+
+            catX = Math.max(10, Math.min(maxX, catX + dx));
+            catY = Math.max(10, Math.min(maxY, catY + dy));
+
+            cat.style.left = catX + 'px';
+            cat.style.top = catY + 'px';
+        }
+
+        // Check collision between cat and crab
+        function checkCollision() {
+            if (isDead) return;
+
+            const catRect = cat.getBoundingClientRect();
+            const crabRect = crab.getBoundingClientRect();
+
+            const isOverlap = !(
+                catRect.right < crabRect.left + 15 || 
+                catRect.left > crabRect.right - 15 || 
+                catRect.bottom < crabRect.top + 15 || 
+                catRect.top > crabRect.bottom - 15
+            );
+
+            if (isOverlap) {
+                lives--;
+                playDamageSound();
+                updateHearts();
+
+                // Teleport cat to base (-180, 0)
+                catX = 40;
+                catY = 140;
+                cat.style.left = catX + 'px';
+                cat.style.top = catY + 'px';
+
+                if (lives <= 0) {
+                    isDead = true;
+                    overlay.style.display = 'flex';
+                }
+            }
+        }
+
+        function updateHearts() {
+            if (lives === 3) hearts.innerText = '❤️❤️❤️';
+            else if (lives === 2) hearts.innerText = '❤️❤️🖤';
+            else if (lives === 1) hearts.innerText = '❤️🖤🖤';
+            else hearts.innerText = '🖤🖤🖤';
+        }
+
+        function restartMiniGame() {
+            lives = 3;
+            isDead = false;
+            catX = 40;
+            catY = 140;
+            cat.style.left = catX + 'px';
+            cat.style.top = catY + 'px';
+            updateHearts();
+            overlay.style.display = 'none';
+        }
+
+        // Keyboard navigation
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') { e.preventDefault(); moveCat(0, -25); }
+            if (e.key === 'ArrowDown') { e.preventDefault(); moveCat(0, 25); }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); moveCat(-25, 0); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); moveCat(25, 0); }
+        });
+
+        // Game loop for real-time contact checking
+        setInterval(checkCollision, 60);
+    </script>
+</body>
+</html>
