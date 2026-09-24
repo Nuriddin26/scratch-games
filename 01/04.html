@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch 3: Урок 4 — Таймер и обратный отсчёт ⏱️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151d30;
+            --scratch-orange: #ffab19;
+            --scratch-orange-glow: rgba(255, 171, 25, 0.4);
+            --scratch-blue: #4c97ff;
+            --scratch-yellow: #ffbf00;
+            --scratch-control: #ffab19;
+            --scratch-purple: #9966ff;
+            --scratch-pink: #cf63cf;
+            --scratch-green: #59c059;
+            --scratch-red: #ef4444;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-card: #27354f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: radial-gradient(circle at top center, #1b2640 0%, #0a0d14 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 14px 40px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: var(--bg-card);
+            border-radius: 18px;
+            border: 2px solid #2d3b55;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            margin-bottom: 22px;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-title h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 15px;
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .brand-title span {
+            font-size: 13px;
+            color: var(--scratch-orange);
+            font-weight: 700;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-pill {
+            background: #0f172a;
+            border: 2px solid #38bdf8;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 14px;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-back {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            color: #fff;
+            border-color: #38bdf8;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-card);
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .story-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(255, 171, 25, 0.08));
+            border-left: 6px solid #38bdf8;
+            border-radius: 14px;
+            padding: 18px 22px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .story-box strong {
+            color: #38bdf8;
+        }
+
+        .script-stack {
+            background: #0b111e;
+            border: 2px solid #22314a;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .scratch-block {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+        }
+
+        .block-event {
+            background: #ffbf00;
+            color: #2b1f00;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+        }
+
+        .block-variable {
+            background: #ff8c1a;
+        }
+
+        .block-control {
+            background: #ffab19;
+            color: #261b00;
+        }
+
+        .block-looks {
+            background: #9966ff;
+        }
+
+        .block-sound {
+            background: #cf63cf;
+        }
+
+        /* Loop C-shape styling */
+        .loop-c-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 540px;
+        }
+
+        .loop-header {
+            background: #ffab19;
+            color: #261b00;
+            padding: 9px 15px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .loop-body {
+            border-left: 18px solid #ffab19;
+            padding: 10px 0 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(255, 171, 25, 0.05);
+        }
+
+        .loop-footer {
+            background: #ffab19;
+            height: 14px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .block-operator {
+            background: #59c059;
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+        }
+
+        .pill-var-orange {
+            background: #ff8c1a;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .pill-value {
+            background: #fff;
+            color: #111;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+
+        .dropdown-value {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .rule-card {
+            background: #0d1424;
+            border: 1.5px solid #22314a;
+            border-radius: 14px;
+            padding: 16px 20px;
+            border-top: 4px solid #38bdf8;
+        }
+
+        .rule-card h3 {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rule-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .screenshot-wrap {
+            margin-top: 20px;
+            background: #090e17;
+            border: 2px dashed #3b4d6e;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .screenshot-wrap img {
+            width: 100%;
+            max-width: 920px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid #24354f;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .screenshot-caption {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Interactive Timer Arena */
+        .timer-arena {
+            background: radial-gradient(circle at center, #1e293b 0%, #090e17 100%);
+            border: 2px solid #38bdf8;
+            border-radius: 18px;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+            padding: 24px;
+            gap: 16px;
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .time-digit {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 64px;
+            color: #38bdf8;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+            transition: all 0.2s;
+        }
+
+        .time-digit.urgent {
+            color: #ef4444;
+            text-shadow: 0 0 25px rgba(239, 68, 68, 0.8);
+            animation: pulseUrgent 0.6s infinite alternate;
+        }
+
+        @keyframes pulseUrgent {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .game-hero {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-height: 70px;
+        }
+
+        .hero-cat {
+            font-size: 55px;
+            user-select: none;
+        }
+
+        .hero-bubble {
+            background: #fff;
+            color: #0f172a;
+            border-radius: 14px;
+            padding: 10px 18px;
+            font-weight: 800;
+            font-size: 15px;
+            position: relative;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        .hero-bubble::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 6px 10px 6px 0;
+            border-style: solid;
+            border-color: transparent #fff transparent transparent;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn-timer {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #075985;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-timer:active {
+            transform: translateY(3px);
+            box-shadow: none;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title">
+            <span style="font-size: 28px;">⏱️</span>
+            <div>
+                <h1>SCRATCH 3 КУРС</h1>
+                <span>Урок 4: Таймер и обратный отсчёт</span>
+            </div>
+        </div>
+        <div class="top-actions">
+            <a href="index.html" class="btn-back">⬅ К урокам</a>
+            <div class="badge-pill">⭐ Занятие 4</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Введение -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">⏳</span>
+                <h2 class="card-title">Задача 4. «Таймер и обратный отсчёт»</h2>
+            </div>
+            <div class="story-box">
+                В играх часто нужно успеть выполнить миссию за ограниченное время (например, набрать 10 очков до конца раунда)! <br>
+                <strong>Сюжет:</strong> Мы создаём переменную <strong>«Время»</strong>. В начале игры кладём туда число <strong>10</strong>, а компьютер каждую секунду сам забирает оттуда единичку (-1). Когда время доходит до 0 — звенит победный сигнал и игра останавливается! 🚀
+            </div>
+        </div>
+
+        <!-- Скрипт в Scratch -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🧩</span>
+                <h2 class="card-title">Скрипт для создания Таймера</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 14px;">
+                Этот скрипт можно добавить прямо на <b>Сцену (Фон)</b> или на любого персонажа:
+            </p>
+
+            <div class="script-stack">
+                <!-- Старт -->
+                <div class="scratch-block block-event">
+                    когда 🚩 нажат
+                </div>
+
+                <!-- Задать Время 10 -->
+                <div class="scratch-block block-variable">
+                    задать <span class="dropdown-value">Время ▾</span> значение <span class="pill-value">10</span>
+                </div>
+
+                <!-- Цикл Повторять пока не -->
+                <div class="loop-c-wrapper">
+                    <div class="loop-header">
+                        повторять пока не 
+                        <span class="block-operator">
+                            <span class="pill-var-orange">Время</span> = <span class="pill-value">0</span>
+                        </span>
+                    </div>
+                    <div class="loop-body">
+                        <div class="scratch-block block-control">
+                            ждать <span class="pill-value">1</span> секунд
+                        </div>
+                        <div class="scratch-block block-variable">
+                            изменить <span class="dropdown-value">Время ▾</span> на <span class="pill-value">-1</span>
+                        </div>
+                    </div>
+                    <div class="loop-footer"></div>
+                </div>
+
+                <!-- Финал -->
+                <div class="scratch-block block-sound">
+                    включить звук <span class="dropdown-value">Win ▾</span>
+                </div>
+
+                <div class="scratch-block block-looks">
+                    говорить <span class="pill-value">Время вышло!</span> <span class="pill-value">2</span> секунд
+                </div>
+
+                <div class="scratch-block block-control" style="background: #ffab19;">
+                    стоп <span class="dropdown-value">всё ▾</span>
+                </div>
+            </div>
+
+            <!-- Главные правила урока -->
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h3>➖ Отрицательные числа (-1)</h3>
+                    <p>Чтобы уменьшать значение переменной, пиши знак минус в блоке: <b>изменить на (-1)</b>. Это вычитает единичку!</p>
+                </div>
+                <div class="rule-card">
+                    <h3>⏱️ Секундный ритм</h3>
+                    <p>Блок <b>ждать (1) секунд</b> из жёлтого раздела <b>Управление</b> превращает обычный цикл в точные часы!</p>
+                </div>
+                <div class="rule-card">
+                    <h3>🛑 Условие остановки</h3>
+                    <p>Зелёный блок <b>(Время) = (0)</b> следит за таймером: как только на часах ноль — цикл выпускает программу дальше к звуку победы.</p>
+                </div>
+            </div>
+
+            <!-- Место под скриншот из Scratch -->
+            <div class="screenshot-wrap">
+                <img src="screenshot_timer.png" alt="Скриншот таймера в Scratch 3" onerror="this.parentElement.style.display='none'">
+                <div class="screenshot-caption">
+                    📸 Скриншот из Scratch 3: проверь, как блок «ждать 1 секунд» спрятан внутри цикла!
+                </div>
+            </div>
+        </div>
+
+        <!-- Интерактивная демка -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🎮</span>
+                <h2 class="card-title">Запусти обратный отсчёт прямо на сайте!</h2>
+            </div>
+            
+            <div class="timer-arena">
+                <div class="time-box">
+                    <span style="color: var(--text-muted); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Переменная «Время»:</span>
+                    <div class="time-digit" id="timerNum">10</div>
+                </div>
+
+                <div class="game-hero">
+                    <div class="hero-cat" id="catEmoji">🐱</div>
+                    <div class="hero-bubble" id="catStatus">
+                        Нажми кнопку «Старт», чтобы запустить таймер!
+                    </div>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="btn-timer" id="startTimerBtn" onclick="runTimerDemo()">
+                        🚩 Запустить таймер (10 сек)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Уроки Scratch 3 • GitHub Pages
+    </footer>
+
+    <script>
+        let timeLeft = 10;
+        let timerInterval = null;
+        let audioCtx = null;
+
+        const timerNum = document.getElementById('timerNum');
+        const catStatus = document.getElementById('catStatus');
+        const catEmoji = document.getElementById('catEmoji');
+        const startBtn = document.getElementById('startTimerBtn');
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTickSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } catch(e) {}
+        }
+
+        function playWinSound() {
+            try {
+                initAudio();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C, E, G, High C
+                const now = audioCtx.currentTime;
+
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+
+                    gain.gain.setValueAtTime(0.25, now + idx * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.35);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start(now + idx * 0.1);
+                    osc.stop(now + idx * 0.1 + 0.38);
+                });
+            } catch(e) {}
+        }
+
+        function runTimerDemo() {
+            if (timerInterval) clearInterval(timerInterval);
+            initAudio();
+
+            timeLeft = 10;
+            timerNum.innerText = timeLeft;
+            timerNum.classList.remove('urgent');
+            catEmoji.innerText = '🐱';
+            catStatus.innerText = 'Время пошло! Считаем секунды... ⏳';
+            startBtn.disabled = true;
+            startBtn.style.opacity = '0.6';
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerNum.innerText = timeLeft;
+                playTickSound();
+
+                if (timeLeft <= 3 && timeLeft > 0) {
+                    timerNum.classList.add('urgent');
+                    catEmoji.innerText = '🙀';
+                    catStatus.innerText = 'Осталось совсем чуть-чуть! Быстрее!';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerNum.classList.remove('urgent');
+                    catEmoji.innerText = '🎉';
+                    catStatus.innerText = 'Время вышло! Дзынь! Победа! 🏆';
+                    playWinSound();
+                    startBtn.disabled = false;
+                    startBtn.style.opacity = '1';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
