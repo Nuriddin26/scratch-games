@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch 3: Урок 1 — Переменные и Игра-Кликалка 🎈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151d30;
+            --scratch-orange: #ffab19;
+            --scratch-orange-glow: rgba(255, 171, 25, 0.4);
+            --scratch-blue: #4c97ff;
+            --scratch-yellow: #ffbf00;
+            --scratch-purple: #9966ff;
+            --scratch-pink: #cf63cf;
+            --scratch-green: #59c059;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-card: #27354f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: radial-gradient(circle at top center, #1b2640 0%, #0a0d14 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 14px 40px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: var(--bg-card);
+            border-radius: 18px;
+            border: 2px solid #2d3b55;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            margin-bottom: 22px;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-title h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 15px;
+            color: var(--scratch-orange);
+            text-shadow: 0 0 10px var(--scratch-orange-glow);
+            letter-spacing: 1px;
+        }
+
+        .brand-title span {
+            font-size: 13px;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-pill {
+            background: #0f172a;
+            border: 2px solid var(--scratch-orange);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 14px;
+            color: var(--scratch-orange);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-back {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            color: #fff;
+            border-color: #38bdf8;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-card);
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .story-box {
+            background: linear-gradient(135deg, rgba(255, 171, 25, 0.12), rgba(56, 189, 248, 0.08));
+            border-left: 6px solid var(--scratch-orange);
+            border-radius: 14px;
+            padding: 18px 22px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .story-box strong {
+            color: var(--scratch-orange);
+        }
+
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .step-item {
+            background: #0d1424;
+            border: 1.5px solid #23334d;
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .step-num {
+            background: var(--scratch-orange);
+            color: #0b0f19;
+            font-weight: 900;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px var(--scratch-orange-glow);
+        }
+
+        .screenshot-wrap {
+            margin-top: 20px;
+            background: #090e17;
+            border: 2px dashed #3b4d6e;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .screenshot-wrap img {
+            width: 100%;
+            max-width: 920px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid #24354f;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .screenshot-caption {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .code-playground {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .code-playground {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .script-stack {
+            background: #0b111e;
+            border: 2px solid #22314a;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .stack-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scratch-block {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+            margin-bottom: 2px;
+        }
+
+        .block-event {
+            background: #ffbf00;
+            color: #2b1f00;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+        }
+
+        .block-variable {
+            background: #ff8c1a;
+        }
+
+        .block-looks {
+            background: #9966ff;
+        }
+
+        .block-sound {
+            background: #cf63cf;
+        }
+
+        .block-motion {
+            background: #4c97ff;
+        }
+
+        .pill-value {
+            background: #fff;
+            color: #111;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+
+        .dropdown-value {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .interactive-preview {
+            background: radial-gradient(circle at center, #1e3a8a 0%, #090e17 100%);
+            border: 2px solid #38bdf8;
+            border-radius: 18px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+            padding: 20px;
+        }
+
+        .scoreboard {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #fff;
+            color: #0f172a;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            user-select: none;
+        }
+
+        .score-pill {
+            background: #ff8c1a;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 6px;
+        }
+
+        .interactive-balloon {
+            font-size: 70px;
+            cursor: pointer;
+            transition: transform 0.12s ease;
+            user-select: none;
+            position: absolute;
+        }
+
+        .interactive-balloon:hover {
+            transform: scale(1.15);
+        }
+
+        .interactive-balloon:active {
+            transform: scale(0.9);
+        }
+
+        .reset-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 14px;
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #059669;
+            transition: transform 0.1s;
+        }
+
+        .reset-btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title">
+            <span style="font-size: 28px;">🐱</span>
+            <div>
+                <h1>SCRATCH 3 КУРС</h1>
+                <span>Урок 1: Переменные и первая игра</span>
+            </div>
+        </div>
+        <div class="top-actions">
+            <a href="../index.html" class="btn-back">⬅ К списку</a>
+            <div class="badge-pill">⭐ Занятие 1</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Введение -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📦</span>
+                <h2 class="card-title">Что такое Переменная?</h2>
+            </div>
+            <div class="story-box">
+                Представь, что у тебя есть <strong>волшебная подписанная коробочка</strong>. <br>
+                На ней наклейка с именем <strong>«Счёт»</strong>. Внутрь можно положить только одно значение! 
+                Каждый раз при лопании шарика мы кладём туда на 1 больше. А при старте по зеленому флажку — вытряхиваем всё и кладём туда <strong>0</strong>!
+            </div>
+        </div>
+
+        <!-- Шаг 0 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🛠️</span>
+                <h2 class="card-title">Шаг 0: Как создать переменную в Scratch 3</h2>
+            </div>
+            
+            <div class="step-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div>Открой оранжевый раздел <strong>«Переменные»</strong> в левой колонке (он в самом низу меню).</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div>Нажми кнопку <strong>«Создать переменную»</strong>.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div>В поле «Имя переменной» напиши: <strong>Счёт</strong>.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div>Оставь отметку <strong>«Для всех спрайтов»</strong> и нажми кнопку <strong>«ОК»</strong>.</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <div>Готово! На сцене справа сразу появится оранжевое табло со счётом! 🎉</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Задача 1: Кликалка -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🎈</span>
+                <h2 class="card-title">Задача 1: Игра-Кликалка «Лопни шарик»</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 16px;">
+                Выбери синий шарик <strong>Balloon1</strong> и собери для него две цепочки блоков:
+            </p>
+
+            <div class="code-playground">
+                <!-- Скрипт 1 -->
+                <div class="script-stack">
+                    <div class="stack-title">Скрипт 1: Запуск и сброс</div>
+                    
+                    <div class="scratch-block block-event">
+                        когда 🚩 нажат
+                    </div>
+                    <div class="scratch-block block-variable">
+                        задать <span class="dropdown-value">Счёт ▾</span> значение <span class="pill-value">0</span>
+                    </div>
+                    <div class="scratch-block block-looks">
+                        показаться
+                    </div>
+                    <div class="scratch-block block-motion">
+                        перейти на <span class="dropdown-value">случайное положение ▾</span>
+                    </div>
+                </div>
+
+                <!-- Скрипт 2 -->
+                <div class="script-stack">
+                    <div class="stack-title">Скрипт 2: Ловим клик мышки</div>
+                    
+                    <div class="scratch-block block-event">
+                        когда спрайт нажат
+                    </div>
+                    <div class="scratch-block block-variable">
+                        изменить <span class="dropdown-value">Счёт ▾</span> на <span class="pill-value">1</span>
+                    </div>
+                    <div class="scratch-block block-sound">
+                        включить звук <span class="dropdown-value">Pop ▾</span>
+                    </div>
+                    <div class="scratch-block block-motion">
+                        перейти на <span class="dropdown-value">случайное положение ▾</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Скриншот из Scratch -->
+            <div class="screenshot-wrap">
+                <!-- Сохрани свой скриншот в эту же папку под именем screenshot_lesson1.png -->
+                <img src="screenshot_lesson1.png" alt="Скриншот готовых блоков в Scratch 3">
+                <div class="screenshot-caption">
+                    📸 Посмотри на скриншот из Scratch 3: проверь, соединены ли твои блоки точно так же!
+                </div>
+            </div>
+        </div>
+
+        <!-- Интерактивная демка -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🎮</span>
+                <h2 class="card-title">Попробуй сыграть прямо сейчас!</h2>
+            </div>
+            
+            <div class="interactive-preview" id="gameArena">
+                <div class="scoreboard">
+                    <span>Счёт</span>
+                    <span class="score-pill" id="scoreDisplay">0</span>
+                </div>
+
+                <div class="interactive-balloon" id="gameBalloon" title="Кликни на меня!">
+                    🎈
+                </div>
+
+                <button class="reset-btn" onclick="resetDemo()">
+                    🚩 Начать заново
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Уроки Scratch 3 • GitHub Pages
+    </footer>
+
+    <script>
+        let score = 0;
+        let audioCtx = null;
+        const balloon = document.getElementById('gameBalloon');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const arena = document.getElementById('gameArena');
+
+        function playPopSound() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const now = audioCtx.currentTime;
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.exponentialRampToValueAtTime(120, now + 0.08);
+
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } catch(e) {}
+        }
+
+        function moveBalloon() {
+            const maxX = arena.clientWidth - 100;
+            const maxY = arena.clientHeight - 100;
+            const randX = Math.max(20, Math.floor(Math.random() * maxX));
+            const randY = Math.max(60, Math.floor(Math.random() * maxY));
+            
+            balloon.style.left = randX + 'px';
+            balloon.style.top = randY + 'px';
+        }
+
+        balloon.addEventListener('click', () => {
+            score++;
+            scoreDisplay.innerText = score;
+            playPopSound();
+            moveBalloon();
+        });
+
+        function resetDemo() {
+            score = 0;
+            scoreDisplay.innerText = score;
+            moveBalloon();
+        }
+
+        window.addEventListener('load', () => {
+            moveBalloon();
+        });
+    </script>
+</body>
+</html>
