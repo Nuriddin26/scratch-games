@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch 3: Секретный пароль и условия 🔐</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151d30;
+            --scratch-orange: #ffab19;
+            --scratch-orange-glow: rgba(255, 171, 25, 0.4);
+            --scratch-blue: #4c97ff;
+            --scratch-yellow: #ffbf00;
+            --scratch-control: #ffab19;
+            --scratch-purple: #9966ff;
+            --scratch-pink: #cf63cf;
+            --scratch-green: #59c059;
+            --scratch-sensing: #5cb1d6;
+            --scratch-red: #ef4444;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-card: #27354f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: radial-gradient(circle at top center, #1b2640 0%, #0a0d14 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 14px 40px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: var(--bg-card);
+            border-radius: 18px;
+            border: 2px solid #2d3b55;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            margin-bottom: 22px;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-title h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 15px;
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .brand-title span {
+            font-size: 13px;
+            color: var(--scratch-orange);
+            font-weight: 700;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-pill {
+            background: #0f172a;
+            border: 2px solid var(--scratch-green);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 14px;
+            color: #4ade80;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-back {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            color: #fff;
+            border-color: #38bdf8;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-card);
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .story-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(89, 192, 89, 0.08));
+            border-left: 6px solid #38bdf8;
+            border-radius: 14px;
+            padding: 18px 22px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .story-box strong {
+            color: #38bdf8;
+        }
+
+        .script-stack {
+            background: #0b111e;
+            border: 2px solid #22314a;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            margin-top: 15px;
+        }
+
+        .scratch-block {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+        }
+
+        .block-event {
+            background: #ffbf00;
+            color: #2b1f00;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+        }
+
+        .block-sensing {
+            background: #5cb1d6;
+        }
+
+        .block-variable {
+            background: #ff8c1a;
+        }
+
+        .block-looks {
+            background: #9966ff;
+        }
+
+        .block-sound {
+            background: #cf63cf;
+        }
+
+        /* If-Else C-shape */
+        .ifelse-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 620px;
+        }
+
+        .ifelse-header {
+            background: #ffab19;
+            color: #261b00;
+            padding: 8px 14px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+            font-size: 14px;
+        }
+
+        .ifelse-body {
+            border-left: 18px solid #ffab19;
+            padding: 8px 0 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(255, 171, 25, 0.05);
+        }
+
+        .ifelse-middle {
+            background: #ffab19;
+            color: #261b00;
+            padding: 6px 14px;
+            font-weight: 800;
+            font-size: 14px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .ifelse-footer {
+            background: #ffab19;
+            height: 12px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .block-operator {
+            background: #59c059;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+        }
+
+        .pill-sensing-answer {
+            background: #47a3cb;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.4);
+            font-size: 13px;
+        }
+
+        .pill-value {
+            background: #fff;
+            color: #111;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+
+        .dropdown-value {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+
+        .rule-card {
+            background: #0d1424;
+            border: 1.5px solid #22314a;
+            border-radius: 14px;
+            padding: 16px 20px;
+            border-top: 4px solid var(--scratch-green);
+        }
+
+        .rule-card h3 {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rule-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .screenshot-wrap {
+            margin-top: 20px;
+            background: #090e17;
+            border: 2px dashed #3b4d6e;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .screenshot-wrap img {
+            width: 100%;
+            max-width: 920px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid #24354f;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .screenshot-caption {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Interactive Cat Demo */
+        .cat-stage {
+            background: radial-gradient(circle at center, #1e293b 0%, #090e17 100%);
+            border: 2px solid #38bdf8;
+            border-radius: 18px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+            gap: 20px;
+        }
+
+        .cat-box {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            min-height: 140px;
+        }
+
+        .cat-avatar {
+            font-size: 85px;
+            filter: drop-shadow(0 0 15px rgba(255, 171, 25, 0.5));
+            animation: catFloat 3s infinite ease-in-out;
+        }
+
+        @keyframes catFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .speech-bubble {
+            background: #fff;
+            color: #0f172a;
+            border-radius: 18px;
+            padding: 14px 20px;
+            font-size: 17px;
+            font-weight: 800;
+            position: relative;
+            max-width: 340px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 8px 12px 8px 0;
+            border-style: solid;
+            border-color: transparent #fff transparent transparent;
+        }
+
+        .input-bar {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .cat-input {
+            flex: 1;
+            background: #0f172a;
+            border: 2px solid #475569;
+            border-radius: 12px;
+            padding: 12px 18px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .cat-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-talk {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 0 22px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #059669;
+            transition: transform 0.1s;
+        }
+
+        .btn-talk:active {
+            transform: translateY(3px);
+            box-shadow: none;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title">
+            <span style="font-size: 28px;">🔐</span>
+            <div>
+                <h1>SCRATCH 3 КУРС</h1>
+                <span>Урок: Секретный пароль и развилка условий</span>
+            </div>
+        </div>
+        <div class="top-actions">
+            <a href="index.html" class="btn-back">⬅ К урокам</a>
+            <div class="badge-pill">⭐ Секретный код</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Введение -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🕵️</span>
+                <h2 class="card-title">Задача. «Секретный сейф Котика»</h2>
+            </div>
+            <div class="story-box">
+                Котик охраняет тайное хранилище и пускает внутрь только тех, кто знает секретный шифр! <br>
+                <strong>Сюжет:</strong> Кот спрашивает пароль. Если игрок вводит именно <strong>189</strong> — сейф открывается и звучит фанфара. А если введено любое другое число или слово — Кот предупреждает об ошибке!
+            </div>
+        </div>
+
+        <!-- Скрипт в Scratch -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🧩</span>
+                <h2 class="card-title">Скрипт с блоком «если - то - иначе»</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 15px;">
+                Спрайт: <b>Котик Scratch</b>. Здесь используется составной блок управления с двумя кармашками:
+            </p>
+
+            <div class="script-stack">
+                <div class="scratch-block block-event">
+                    когда 🚩 нажат
+                </div>
+
+                <div class="scratch-block block-sensing">
+                    спросить <span class="pill-value">Назови секретный пароль:</span> и ждать
+                </div>
+
+                <!-- Конструкция Если - То - Иначе -->
+                <div class="ifelse-wrapper">
+                    <div class="ifelse-header">
+                        если 
+                        <span class="block-operator">
+                            <span class="pill-sensing-answer">ответ</span> = <span class="pill-value">189</span>
+                        </span> то
+                    </div>
+                    <div class="ifelse-body">
+                        <div class="scratch-block block-sound">
+                            включить звук <span class="dropdown-value">Magic Spell ▾</span>
+                        </div>
+                        <div class="scratch-block block-looks">
+                            говорить <span class="pill-value">Ура! Пароль верный, проходи! 🎉</span> <span class="pill-value">2</span> секунд
+                        </div>
+                    </div>
+                    <div class="ifelse-middle">
+                        иначе
+                    </div>
+                    <div class="ifelse-body">
+                        <div class="scratch-block block-sound">
+                            включить звук <span class="dropdown-value">Oops ▾</span>
+                        </div>
+                        <div class="scratch-block block-looks">
+                            говорить <span class="pill-value">Неправильный пароль! Доступ закрыт ❌</span> <span class="pill-value">2</span> секунд
+                        </div>
+                    </div>
+                    <div class="ifelse-footer"></div>
+                </div>
+            </div>
+
+            <!-- Разбор механики -->
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h3>⚖️ Развилка «иначе»</h3>
+                    <p>Блок <b>если - иначе</b> работает как стрелка на рельсах: если пароль совпал, программа едет по верхней ветке, а во всех остальных случаях — строго по нижней.</p>
+                </div>
+                <div class="rule-card">
+                    <h3>💬 Кругляшок «ответ»</h3>
+                    <p>После вопроса то, что напечатал игрок, автоматически лежит в голубом овале <b>ответ</b> в разделе <b>Сенсоры</b>.</p>
+                </div>
+                <div class="rule-card">
+                    <h3>🟢 Зелёное сравнение</h3>
+                    <p>Блок <b>( ) = ( )</b> из раздела <b>Операторы</b> проверяет строгое равенство: ровно 189 и ни символом больше!</p>
+                </div>
+            </div>
+
+            <!-- Место под скриншот -->
+            <div class="screenshot-wrap">
+                <img src="screenshot_password.png" alt="Скриншот условия с паролем в Scratch 3" onerror="this.parentElement.style.display='none'">
+                <div class="screenshot-caption">
+                    📸 Скриншот из Scratch 3: проверь, как блок ответа помещён в левое ушко знака «=»!
+                </div>
+            </div>
+        </div>
+
+        <!-- Интерактивная демка -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🎮</span>
+                <h2 class="card-title">Проверь пароль прямо сейчас!</h2>
+            </div>
+            
+            <div class="cat-stage">
+                <div class="cat-box">
+                    <div class="cat-avatar" id="catEmoji">🐱</div>
+                    <div class="speech-bubble" id="catBubble">
+                        Назови секретный пароль:
+                    </div>
+                </div>
+
+                <form class="input-bar" onsubmit="checkPasswordDemo(event)">
+                    <input type="text" class="cat-input" id="pwdInput" placeholder="Введи число..." autocomplete="off">
+                    <button type="submit" class="btn-talk">Проверить</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Уроки Scratch 3 • GitHub Pages[cite: 7]
+    </footer>
+
+    <script>
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSuccessSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const notes = [440, 554.37, 659.25, 880]; // A Major fanfare
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.1);
+                    osc.stop(now + idx * 0.1 + 0.38);
+                });
+            } catch(e) {}
+        }
+
+        function playFailSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.linearRampToValueAtTime(80, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            } catch(e) {}
+        }
+
+        function checkPasswordDemo(e) {
+            e.preventDefault();
+            const input = document.getElementById('pwdInput');
+            const catBubble = document.getElementById('catBubble');
+            const catEmoji = document.getElementById('catEmoji');
+            const val = input.value.trim();
+
+            if (!val) return;
+
+            if (val === '189') {
+                playSuccessSound();
+                catEmoji.innerText = '😸';
+                catBubble.innerText = 'Ура! Пароль верный, проходи! 🎉✨';
+                catBubble.style.borderColor = '#10b981';
+            } else {
+                playFailSound();
+                catEmoji.innerText = '😾';
+                catBubble.innerText = 'Неправильный пароль! Доступ закрыт ❌';
+                catBubble.style.borderColor = '#ef4444';
+            }
+
+            input.value = '';
+            setTimeout(() => {
+                catEmoji.innerText = '🐱';
+                catBubble.innerText = 'Назови секретный пароль:';
+                catBubble.style.borderColor = 'transparent';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
