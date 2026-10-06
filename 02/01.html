@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch 3: Урок 5 — Здоровье героя и Game Over ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151d30;
+            --scratch-orange: #ffab19;
+            --scratch-orange-glow: rgba(255, 171, 25, 0.4);
+            --scratch-blue: #4c97ff;
+            --scratch-yellow: #ffbf00;
+            --scratch-control: #ffab19;
+            --scratch-purple: #9966ff;
+            --scratch-pink: #cf63cf;
+            --scratch-green: #59c059;
+            --scratch-sensing: #5cb1d6;
+            --scratch-red: #ef4444;
+            --scratch-red-glow: rgba(239, 68, 68, 0.4);
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-card: #27354f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: radial-gradient(circle at top center, #261624 0%, #0a0d14 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 14px 40px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: var(--bg-card);
+            border-radius: 18px;
+            border: 2px solid #2d3b55;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            margin-bottom: 22px;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-title h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 15px;
+            color: #f43f5e;
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .brand-title span {
+            font-size: 13px;
+            color: var(--scratch-orange);
+            font-weight: 700;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-pill {
+            background: #0f172a;
+            border: 2px solid #f43f5e;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 14px;
+            color: #f43f5e;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-back {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            color: #fff;
+            border-color: #38bdf8;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-card);
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .story-box {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.12), rgba(255, 171, 25, 0.08));
+            border-left: 6px solid #f43f5e;
+            border-radius: 14px;
+            padding: 18px 22px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .story-box strong {
+            color: #fb7185;
+        }
+
+        .attention-box {
+            background: rgba(239, 68, 68, 0.12);
+            border: 2px dashed #f87171;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 14px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #fecaca;
+        }
+
+        .attention-box b {
+            color: #ffffff;
+        }
+
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 14px;
+        }
+
+        @media (max-width: 860px) {
+            .scripts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .script-stack {
+            background: #0b111e;
+            border: 2px solid #22314a;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .stack-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scratch-block {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+        }
+
+        .block-event {
+            background: #ffbf00;
+            color: #2b1f00;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .block-variable { background: #ff8c1a; }
+        .block-control { background: #ffab19; color: #261b00; }
+        .block-motion { background: #4c97ff; }
+        .block-looks { background: #9966ff; }
+        .block-sound { background: #cf63cf; }
+
+        .loop-c-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .loop-header {
+            background: #ffab19;
+            color: #261b00;
+            padding: 7px 12px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+            font-size: 13.5px;
+        }
+
+        .loop-body {
+            border-left: 16px solid #ffab19;
+            padding: 6px 0 6px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: rgba(255, 171, 25, 0.05);
+        }
+
+        .loop-footer {
+            background: #ffab19;
+            height: 12px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .block-sensing {
+            background: #5cb1d6;
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #fff;
+        }
+
+        .block-operator {
+            background: #59c059;
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #fff;
+        }
+
+        .pill-var-orange {
+            background: #ff8c1a;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .pill-value {
+            background: #fff;
+            color: #111;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+        }
+
+        .dropdown-value {
+            background: rgba(0, 0, 0, 0.22);
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .flowchart-container {
+            background: #090e17;
+            border: 2px solid #22314a;
+            border-radius: 14px;
+            padding: 18px;
+            margin-top: 14px;
+            overflow-x: auto;
+        }
+
+        .flowchart-pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.45;
+            color: #38bdf8;
+            white-space: pre;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+
+        .rule-card {
+            background: #0d1424;
+            border: 1.5px solid #22314a;
+            border-radius: 14px;
+            padding: 16px 20px;
+            border-top: 4px solid #f43f5e;
+        }
+
+        .rule-card h3 {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rule-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .screenshot-wrap {
+            margin-top: 20px;
+            background: #090e17;
+            border: 2px dashed #3b4d6e;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .screenshot-wrap img {
+            width: 100%;
+            max-width: 920px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid #24354f;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .screenshot-caption {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Interactive Arcade Stage */
+        .arcade-arena {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #090e17 100%);
+            border: 2px solid #f43f5e;
+            border-radius: 18px;
+            height: 320px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(244, 63, 94, 0.2);
+            user-select: none;
+        }
+
+        .scoreboard-lives {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            padding: 6px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 900;
+            font-size: 15px;
+            z-index: 10;
+        }
+
+        .actor-cat {
+            position: absolute;
+            font-size: 46px;
+            left: 40px;
+            top: 130px;
+            transition: left 0.08s ease, top 0.08s ease;
+            z-index: 5;
+        }
+
+        .actor-crab {
+            position: absolute;
+            font-size: 42px;
+            left: 320px;
+            top: 40px;
+            z-index: 5;
+            will-change: left, top;
+        }
+
+        .game-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(9, 14, 23, 0.88);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            backdrop-filter: blur(4px);
+        }
+
+        .game-over-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 22px;
+            color: #ef4444;
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+            margin-bottom: 14px;
+        }
+
+        .touch-pad {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            justify-content: center;
+        }
+
+        .pad-btn {
+            background: #1e293b;
+            border: 2px solid #334155;
+            color: #fff;
+            font-size: 20px;
+            width: 54px;
+            height: 48px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.1s;
+        }
+
+        .pad-btn:active, .pad-btn.pressed {
+            background: #f43f5e;
+            border-color: #f43f5e;
+        }
+
+        .btn-restart {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #059669;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title">
+            <span style="font-size: 28px;">❤️</span>
+            <div>
+                <h1>SCRATCH 3 КУРС</h1>
+                <span>Урок 5: Здоровье героя и Game Over</span>
+            </div>
+        </div>
+        <div class="top-actions">
+            <a href="../index.html" class="btn-back">⬅ К урокам</a>
+            <div class="badge-pill">⭐ Занятие 5</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Введение -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🛡️</span>
+                <h2 class="card-title">Задача 5. «Жизни героя и условие Game Over»</h2>
+            </div>
+            <div class="story-box">
+                Почти в каждой игре у персонажа есть запас жизней или очков здоровья (HP)! <br>
+                <strong>Сюжет:</strong> Наш Кот исследует локацию, а быстрый Краб 🦀 <strong>непрерывно преследует его</strong>! Если Краб касается Кота, отнимается <strong>-1 жизнь</strong>, а Кот мгновенно отскакивает на безопасную базу! Если сердечек не остаётся (Жизни = 0) — звучит звук проигрыша и игра останавливается.
+            </div>
+
+            <div class="attention-box">
+                ⚠️ <b>Важный секрет сборки:</b> В блоке <code>касается [ ... ] ?</code> нужно нажать на маленькую стрелочку и выбрать имя спрайта <b>Краб</b> из выпадающего списка. Оранжевый овал переменной внутрь вставлять <b>не нужно</b>!
+            </div>
+        </div>
+
+        <!-- 3 Скрипта игры -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🧩</span>
+                <h2 class="card-title">Все 3 скрипта для создания игры</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 15px;">
+                В проекте участвуют два спрайта: <b>Котик</b> (главный герой) и <b>Краб</b> (добавь его через кнопку «Выбрать спрайт» внизу справа).
+            </p>
+
+            <div class="scripts-grid">
+                
+                <!-- Колонка 1: Управление Котом и Краб -->
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    
+                    <!-- Скрипт 1: Стрелки Кота -->
+                    <div class="script-stack">
+                        <div class="stack-title">🎮 1. Скрипты Котика: Ходьба по стрелкам</div>
+                        
+                        <div class="scratch-block block-event">
+                            когда клавиша <span class="dropdown-value">стрелка вправо ▾</span> нажата
+                        </div>
+                        <div class="scratch-block block-motion">
+                            изменить x на <span class="pill-value">15</span>
+                        </div>
+
+                        <div class="scratch-block block-event" style="margin-top: 6px;">
+                            когда клавиша <span class="dropdown-value">стрелка влево ▾</span> нажата
+                        </div>
+                        <div class="scratch-block block-motion">
+                            изменить x на <span class="pill-value">-15</span>
+                        </div>
+
+                        <div class="scratch-block block-event" style="margin-top: 6px;">
+                            когда клавиша <span class="dropdown-value">стрелка вверх ▾</span> нажата
+                        </div>
+                        <div class="scratch-block block-motion">
+                            изменить y на <span class="pill-value">15</span>
+                        </div>
+
+                        <div class="scratch-block block-event" style="margin-top: 6px;">
+                            когда клавиша <span class="dropdown-value">стрелка вниз ▾</span> нажата
+                        </div>
+                        <div class="scratch-block block-motion">
+                            изменить y на <span class="pill-value">-15</span>
+                        </div>
+                    </div>
+
+                    <!-- Скрипт 2: Краб-преследователь -->
+                    <div class="script-stack">
+                        <div class="stack-title">🦀 2. Скрипт Краба: Активная погоня</div>
+                        
+                        <div class="scratch-block block-event">
+                            когда 🚩 нажат
+                        </div>
+                        <div class="scratch-block block-motion">
+                            перейти в x: <span class="pill-value">180</span> y: <span class="pill-value">100</span>
+                        </div>
+                        <div class="loop-c-wrapper">
+                            <div class="loop-header">повторять всегда</div>
+                            <div class="loop-body">
+                                <div class="scratch-block block-motion">
+                                    повернуться к <span class="dropdown-value">Котик ▾</span>
+                                </div>
+                                <div class="scratch-block block-motion">
+                                    идти <span class="pill-value">3</span> шагов
+                                </div>
+                                <div class="scratch-block block-control">
+                                    ждать <span class="pill-value">0.02</span> секунд
+                                </div>
+                            </div>
+                            <div class="loop-footer"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Колонка 2: Алгоритм Жизней Кота -->
+                <div class="script-stack">
+                    <div class="stack-title">❤️ 3. Скрипт Котика: Жизни и Столкновение</div>
+                    
+                    <div class="scratch-block block-event">
+                        когда 🚩 нажат
+                    </div>
+
+                    <div class="scratch-block block-variable">
+                        задать <span class="dropdown-value">Жизни ▾</span> значение <span class="pill-value">3</span>
+                    </div>
+
+                    <div class="loop-c-wrapper">
+                        <div class="loop-header">
+                            повторять всегда
+                        </div>
+                        <div class="loop-body">
+                            
+                            <!-- Внешнее условие: касается краба -->
+                            <div class="loop-c-wrapper">
+                                <div class="loop-header">
+                                    если 
+                                    <span class="block-sensing">
+                                        касается <span class="dropdown-value">Crab ▾</span> ?
+                                    </span> то
+                                </div>
+                                <div class="loop-body">
+                                    <div class="scratch-block block-variable">
+                                        изменить <span class="dropdown-value">Жизни ▾</span> на <span class="pill-value">-1</span>
+                                    </div>
+                                    <div class="scratch-block block-sound">
+                                        включить звук <span class="dropdown-value">Oops ▾</span>
+                                    </div>
+                                    <div class="scratch-block block-motion">
+                                        перейти в x: <span class="pill-value">-180</span> y: <span class="pill-value">0</span>
+                                    </div>
+
+                                    <!-- Вложенное условие: Жизни = 0 -->
+                                    <div class="loop-c-wrapper">
+                                        <div class="loop-header">
+                                            если 
+                                            <span class="block-operator">
+                                                <span class="pill-var-orange">Жизни</span> = <span class="pill-value">0</span>
+                                            </span> то
+                                        </div>
+                                        <div class="loop-body">
+                                            <div class="scratch-block block-looks">
+                                                говорить <span class="pill-value">Игра окончена!</span> <span class="pill-value">2</span> секунд
+                                            </div>
+                                            <div class="scratch-block block-control">
+                                                стоп <span class="dropdown-value">всё ▾</span>
+                                            </div>
+                                        </div>
+                                        <div class="loop-footer"></div>
+                                    </div>
+
+                                </div>
+                                <div class="loop-footer"></div>
+                            </div>
+
+                        </div>
+                        <div class="loop-footer"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Блок-схема взаимодействия -->
+            <div class="flowchart-container">
+                <div class="stack-title" style="margin-bottom: 6px;">📐 Полная блок-схема игры</div>
+                <div class="flowchart-pre">
+======================= АЛГОРИТМ ИГРЫ (SCRATCH 3) =======================
+
+       [ КОТИК (Игрок) ]                           [ КРАБ (Враг) ]
+               │                                          │
+       когда 🚩 нажат                             когда 🚩 нажат
+               │                                          │
+    [Задать Жизни = 3]                        [Перейти в x:180 y:100]
+               │                                          │
+    ┌──────────▼──────────┐                    ┌──────────▼──────────┐
+    │  Повторять всегда   │                    │  Повторять всегда   │
+    │  ─────────────────  │                    │  ─────────────────  │
+    │  Касается Краба?   │                    │  Повернуться к Коту │
+    │    │           │    │                    │  Идти 3 шага        │
+    │   Да          Нет   │                    │  Ждать 0.02 сек     │
+    │    │           │    │                    └──────────┬──────────┘
+    │ [Жизни = -1]   └───┐│                               │
+    │ [Звук "Oops"]      ││                               │
+    │ [Телепорт на базу] ││                               ▼
+    │    │               ││                       (Цикл погони)
+    │ <Жизни = 0?>       ││
+    │    ├─ Да ──► [Говорить "Game Over!"] ──► [СТОП ВСЁ]
+    │    └─ Нет ─────────┘│
+    └─────────────────────┘</div>
+            </div>
+
+            <!-- Главные правила урока -->
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h3>🚪 Зачем телепорт в x: -180 y: 0?</h3>
+                    <p>Этот блок мгновенно отбрасывает Кота на базу. Без него Краб касался бы Кота каждый кадр и все 3 жизни сгорели бы за полсекунды!</p>
+                </div>
+                <div class="rule-card">
+                    <h3>🏃‍♂️ Преследование</h3>
+                    <p>Блоки <b>повернуться к [Котик]</b> и <b>идти [3] шагов</b> заставляют Краба непрерывно выслеживать игрока, создавая напряжённую погоню.</p>
+                </div>
+                <div class="rule-card">
+                    <h3>🛑 Финал: Стоп всё</h3>
+                    <p>Красный блок <b>стоп [всё]</b> полностью выключает всех персонажей на экране и завершает игру.</p>
+                </div>
+            </div>
+
+            <!-- Место под скриншот -->
+            <div class="screenshot-wrap">
+                <img src="screenshot_lives.png" alt="Скриншот готовых скриптов в Scratch 3" onerror="this.parentElement.style.display='none'">
+                <div class="screenshot-caption">
+                    📸 Скриншот из Scratch 3: проверь все собранные блоки и выпадающий список спрайта!
+                </div>
+            </div>
+        </div>
+
+        <!-- Интерактивная демка -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🎮</span>
+                <h2 class="card-title">Попробуй увернуться от Краба прямо сейчас!</h2>
+            </div>
+            
+            <div class="arcade-arena" id="arcadeStage">
+                <div class="scoreboard-lives">
+                    <span>Жизни:</span>
+                    <span id="heartsContainer">❤️❤️❤️</span>
+                </div>
+
+                <div class="actor-cat" id="catPlayer">🐱</div>
+                <div class="actor-crab" id="crabEnemy">🦀</div>
+
+                <div class="game-overlay" id="gameOverOverlay">
+                    <div class="game-over-title">ИГРА ОКОНЧЕНА!</div>
+                    <p style="color: #cbd5e1; margin-bottom: 20px;">Закончились сердечки! Попробуй снова!</p>
+                    <button class="btn-restart" onclick="restartMiniGame()">🚩 Начать заново</button>
+                </div>
+            </div>
+
+            <div class="touch-pad">
+                <button class="pad-btn" id="btnUp" onclick="moveCat(0, -25)">⬆️</button>
+                <button class="pad-btn" id="btnLeft" onclick="moveCat(-25, 0)">⬅️</button>
+                <button class="pad-btn" id="btnDown" onclick="moveCat(0, 25)">⬇️</button>
+                <button class="pad-btn" id="btnRight" onclick="moveCat(25, 0)">➡️</button>
+            </div>
+            <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 8px;">
+                💡 Жми стрелки на клавиатуре или кликай по экранным кнопкам!
+            </p>
+        </div>
+
+    </div>
+
+    <footer>
+        Уроки Scratch 3
+    </footer>
+
+    <script>
+        let lives = 3;
+        let catX = 40;
+        let catY = 130;
+        let crabX = 320;
+        let crabY = 40;
+        const CRAB_SPEED = 1.4; // Скорость преследования краба
+        let isDead = false;
+        let audioCtx = null;
+        let animationFrameId = null;
+
+        const cat = document.getElementById('catPlayer');
+        const crab = document.getElementById('crabEnemy');
+        const hearts = document.getElementById('heartsContainer');
+        const overlay = document.getElementById('gameOverOverlay');
+        const stage = document.getElementById('arcadeStage');
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playDamageSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(240, now);
+                osc.frequency.linearRampToValueAtTime(80, now + 0.16);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.16);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.16);
+            } catch(e) {}
+        }
+
+        function moveCat(dx, dy) {
+            if (isDead) return;
+            initAudio();
+
+            const maxX = stage.clientWidth - 55;
+            const maxY = stage.clientHeight - 55;
+
+            catX = Math.max(10, Math.min(maxX, catX + dx));
+            catY = Math.max(10, Math.min(maxY, catY + dy));
+
+            cat.style.left = catX + 'px';
+            cat.style.top = catY + 'px';
+        }
+
+        // Постоянное преследование Кота Крабом
+        function updateCrabAI() {
+            if (isDead) return;
+
+            const dx = catX - crabX;
+            const dy = catY - crabY;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist > 3) {
+                crabX += (dx / dist) * CRAB_SPEED;
+                crabY += (dy / dist) * CRAB_SPEED;
+
+                crab.style.left = crabX + 'px';
+                crab.style.top = crabY + 'px';
+            }
+        }
+
+        function checkCollision() {
+            if (isDead) return;
+
+            const catRect = cat.getBoundingClientRect();
+            const crabRect = crab.getBoundingClientRect();
+
+            const isOverlap = !(
+                catRect.right < crabRect.left + 15 || 
+                catRect.left > crabRect.right - 15 || 
+                catRect.bottom < crabRect.top + 15 || 
+                catRect.top > crabRect.bottom - 15
+            );
+
+            if (isOverlap) {
+                lives--;
+                playDamageSound();
+                updateHearts();
+
+                // Отброс кота на безопасную базу (-180, 0 в Scratch)
+                catX = 40;
+                catY = 130;
+                cat.style.left = catX + 'px';
+                cat.style.top = catY + 'px';
+
+                // Сброс позиции Краба подальше от Кота
+                crabX = stage.clientWidth - 70;
+                crabY = 40;
+                crab.style.left = crabX + 'px';
+                crab.style.top = crabY + 'px';
+
+                if (lives <= 0) {
+                    isDead = true;
+                    overlay.style.display = 'flex';
+                }
+            }
+        }
+
+        function gameLoop() {
+            updateCrabAI();
+            checkCollision();
+            if (!isDead) {
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function updateHearts() {
+            if (lives === 3) hearts.innerText = '❤️❤️❤️';
+            else if (lives === 2) hearts.innerText = '❤️❤️🖤';
+            else if (lives === 1) hearts.innerText = '❤️🖤🖤';
+            else hearts.innerText = '🖤🖤🖤';
+        }
+
+        function restartMiniGame() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            lives = 3;
+            isDead = false;
+            catX = 40;
+            catY = 130;
+            crabX = stage.clientWidth - 70;
+            crabY = 40;
+
+            cat.style.left = catX + 'px';
+            cat.style.top = catY + 'px';
+            crab.style.left = crabX + 'px';
+            crab.style.top = crabY + 'px';
+
+            updateHearts();
+            overlay.style.display = 'none';
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        // Запуск игрового цикла погони
+        animationFrameId = requestAnimationFrame(gameLoop);
+
+        // Управление стрелками
+        window.addEventListener('keydown', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+                e.preventDefault();
+            }
+            if (e.code === 'ArrowUp') {
+                moveCat(0, -25);
+                flashBtn('btnUp');
+            } else if (e.code === 'ArrowDown') {
+                moveCat(0, 25);
+                flashBtn('btnDown');
+            } else if (e.code === 'ArrowLeft') {
+                moveCat(-25, 0);
+                flashBtn('btnLeft');
+            } else if (e.code === 'ArrowRight') {
+                moveCat(25, 0);
+                flashBtn('btnRight');
+            }
+        });
+
+        function flashBtn(id) {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            btn.classList.add('pressed');
+            setTimeout(() => btn.classList.remove('pressed'), 120);
+        }
+    </script>
+</body>
+</html>
